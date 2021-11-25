@@ -1,9 +1,9 @@
 @extends('layout')
 
 @section('title')
-    Hello
+    Contact
 @endsection
 
 @section('content')
-    Hello
+    Contact
 @endsection

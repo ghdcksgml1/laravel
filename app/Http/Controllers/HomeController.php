@@ -11,7 +11,7 @@ class HomeController extends Controller
                 'Harry Potter',
                 'Laravel'
             ];
-            return view('welcome')->withBooks($books);
+            return view('welcome')->with(['books' => $books]);
     }
 
     public function hello(){

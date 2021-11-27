@@ -1,72 +1,72 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# 📘 Laravel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## 모델 생성과 데이터베이스 사용법
 
-## About Laravel
+데이터베이스를 통해 테이블을 만든다고해도 곧바로 사용할 수 없고, 모델을 정의해줘야한다.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<br/>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 모델만들기 명령어
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```
+$php artisan make:model 모델명
+```
 
-## Learning Laravel
+다음 명령어를 입력하면 app폴더의 하위폴더에 모델명.php 파일이 생긴다.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+다시 routes의 web.php 폴더에 가서 Route::get('/모델명', '모델명Controller@index'); 를 통해 호출해보는 과정을 실습해보자.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+우선 모델명의 Controller를 만들기 위해 아래의 명령어를 입력
 
-## Laravel Sponsors
+- 컨트롤러만들기 명령어
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```
+$php artisan make:controller 모델명Controller
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+명령어를 실행했으면 app\Http\Controllers\ 폴더에 모델명Controller.php가 생성된다.
 
-## Contributing
+아래와 같이 App\모델명::all() 을 통해 모델의 모든 요소를 가져온 뒤 view 함수를 통해 해당 블레이더 파일로 객체를 넘긴다.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```php
+namespace App\Http\Controllers;
 
-## Security Vulnerabilities
+use Illuminate\Http\Request;
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+class ProjectController extends Controller
+{
+    public function index(){
+        $projects = \App\Project::all();
 
-## License
+        return view('projects.index',[
+            'projects' => $projects
+        ]);
+    }
+}
+```
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+블레이드 파일에서는 가져온 객체를 화살표기호(->) 를 이용하여 데이터베이스에 접근한다.
+
+```php
+@extends('layout')
+
+@section('content')
+    <h1>Project List</h1>
+    @foreach($projects as $project)
+        Title : {{$project->title}}<br/>
+        Description : {{$project->description}}<br/>
+    @endforeach
+@endsection
+```
+
+<br/>
+
+### Web에서 동작 순서 (모델명 Project 기준)
+
+127.0.0.1:8000/projects 를 입력하게되면
+
+- routes\web.php 에서 Route::get('/projects','ProjectController@index'); 실행
+- app\Http\Controllers\ProjectController.php(컨트롤러) 파일의 index 메소드 호출
+- index 메소드에서 app\Project.php(모델) 을 통해 데이터베이스 파일을 모두 가지고옴
+- view 함수를 통해 resources\views\projects\index.blade.php(뷰)를 웹 화면에 띄우기 전에 데이터베이스를 담아두었던 projects 변수를 넣어주고 웹 화면을 띄워줌
+- 컨트롤러의 index 메소드가 종료됨.

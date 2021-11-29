@@ -1,5 +1,42 @@
 # 📘 Laravel
 
+## 🧩 Laravel 환경세팅
+
+기본적으로 php7.x 버전과 mysql5.x 버전이 필요하다.
+
+```
+$brew install php@7.3
+$brew install mysql@5.7
+```
+
+<br/>
+
+composer가 설치되어 있어야한다. (composer install 만 구글링해도 나옴.)
+
+- 라라벨 설치
+
+```
+$composer create-project laravel/laravel project "5.8.*"
+```
+
+<br/>
+
+- 프로젝트 생성방법
+
+```
+$composer create-project laravel/laravel="5.8.*" [프로젝트 이름]
+```
+
+<br/>
+
+- 프로젝트까지 생성됐으면, 해당 폴더로 들어가 서버를 켜본다.
+
+```
+$php artisan serve
+```
+
+<br/><br/>
+
 ## 🧩 Route
 
 web.php 에서 Route를 통해 아래의 다양한 동작을 할 수 있다.

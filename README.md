@@ -1,6 +1,6 @@
 # 📘 Laravel
 
-## 모델 생성과 데이터베이스 사용법
+## 🧩 모델 생성과 데이터베이스 사용법
 
 데이터베이스를 통해 테이블을 만든다고해도 곧바로 사용할 수 없고, 모델을 정의해줘야한다.
 
@@ -70,3 +70,74 @@ class ProjectController extends Controller
 - index 메소드에서 app\Project.php(모델) 을 통해 데이터베이스 파일을 모두 가지고옴
 - view 함수를 통해 resources\views\projects\index.blade.php(뷰)를 웹 화면에 띄우기 전에 데이터베이스를 담아두었던 projects 변수를 넣어주고 웹 화면을 띄워줌
 - 컨트롤러의 index 메소드가 종료됨.
+
+<br/><br/>
+
+## 🧩 tailwindcss 환경설정 (node.js가 설치되어있어야함.)
+
+설치 가이드 : https://tailwindcss.com/docs/installation
+
+- phpStorm으로 돌아가서 터미널을 킨다.
+
+```
+$npm install
+```
+
+```
+$npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+```
+
+- npm install이 끝나면 node_modules 라는 폴더가 생기는 것을 확인할 수 있다.
+
+- resources 폴더에 들어가 css폴더를 만들고, tailwind.css 파일을 생성한다.
+
+```css
+/* resources/css/tailwind.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+- 위 코드를 입력한다.
+
+- webpack.mix.js 파일에 들어가서 아래와 같이 바꿔준다.
+
+```javascript
+// webpack.mix.js
+mix.js("resources/js/app.js", "public/js")
+    .sass('resources/sass/app.scss', 'public/css')
+    .postCss("resources/css/tailwind.css", "public/css", [
+        require("tailwindcss"),
+    ]);
+```
+
+- 아래 명령어를 실행시킨다.
+
+```
+$npm run dev
+```
+
+### 🔴 이때 postCSS8 Error가 발생할 수 있다. 호환성문제이므로 postCSS7로 바꿔주면 된다.
+
+```
+$npm uninstall tailwindcss postcss autoprefixer
+$npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+```
+
+<br/>
+
+잘 완료가 되었으면 public/css/tailwind.css 가 생성되었을 것이다.
+
+<br/>
+
+### Tailwind 사용방법
+
+블레이드 파일의 <head> 태그부분에서
+    
+```html
+<link rel="stylesheet" href=""{{ mix('css/tailwind.css') }}">
+```
+                                                            
+다음을 추가해주면 된다.
+                                                            
+                                                            

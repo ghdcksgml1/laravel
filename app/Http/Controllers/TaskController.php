@@ -25,6 +25,13 @@ class TaskController extends Controller
             'body' => $request->input('body')
         ]);
 
-        return redirect('/tasks');
+        return redirect('/tasks/'.$task->id);
+    }
+
+    public function show(Task $task){ // laravel에서 모델자료형을 앞에 붙여주면 알아서 $task에 맞는 열을 찾아 $task변수에 넣어준다.
+
+        return view('tasks.show',[
+            'task' => $task
+        ]);
     }
 }

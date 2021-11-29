@@ -15,6 +15,56 @@ Route::get('/hello');
 
 <br/><br/>
 
+## 🧩 @yield와 @section
+
+laravel의 강력한 기능인 @yield와 @section이다.
+    
+```
+resources/views/ 폴더의 블레이드 파일에서 @yield('변수명') 을 써주면 해당 부분에 들어갈 코드를 다른 파일에서 지정할 수 있다.
+
+예를 들어, 똑같은 내용이지만 제목만 다른 파일 100개가 있다고했을때 100개의 모든 파일에 똑같은 코드를 입력하게된다면, 만약 내용에
+
+수정사항이 생길때 100개의 파일을 전부 고쳐야한다. 따라서, 이 @yield를 이용해 바꿔야하는 부분을 표시해주고 중복되는 부분은 layout.blade.php 따로두어서
+
+layout을 만들어놓고 각각의 100개의 파일에서는 @yield부분에 들어갈 내용만 설정해주면 된다.
+```
+
+@yield로 지정된 부분은 @section @endsection을 통해 넣어줄 수 있다.
+
+```html
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>@yield('title', 'Laravel')</title>
+        <link rel="stylesheet" href="{{mix('css/tailwind.css')}}">
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    </head>
+    <body>
+    <div class="container mx-auto">
+        @yield('content')
+    </div>
+
+    </body>
+</html>
+```
+
+```php
+@extends('layout')
+
+@section('title')
+    Hello
+@endsection
+
+@section('content','hello') // 이 방법도 가능
+```
+
+<br/><br/>
+
 ## 🧩 모델 생성과 데이터베이스 사용법
 
 데이터베이스를 통해 테이블을 만든다고해도 곧바로 사용할 수 없고, 모델을 정의해줘야한다.

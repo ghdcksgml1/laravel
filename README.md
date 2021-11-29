@@ -1,5 +1,20 @@
 # 📘 Laravel
 
+## 🧩 Route
+
+web.php 에서 Route를 통해 아래의 다양한 동작을 할 수 있다.
+
+Route Name은 관용적으로 사용하는 네이밍이니 아래의 표에 맞게 잘 설정하자.
+
+<img width="645" alt="스크린샷 2021-11-30 오전 1 26 32" src="https://user-images.githubusercontent.com/79779676/143905222-7ab848ba-8c6d-4890-b57d-46ffa4311440.png">
+
+```php
+// web.php
+Route::get('/hello');
+```
+
+<br/><br/>
+
 ## 🧩 모델 생성과 데이터베이스 사용법
 
 데이터베이스를 통해 테이블을 만든다고해도 곧바로 사용할 수 없고, 모델을 정의해줘야한다.

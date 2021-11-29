@@ -132,12 +132,88 @@ $npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autopref
 
 ### Tailwind 사용방법
 
-블레이드 파일의 <head> 태그부분에서
+블레이드 파일의 head 태그부분에서
     
 ```html
 <link rel="stylesheet" href=""{{ mix('css/tailwind.css') }}">
 ```
                                                             
 다음을 추가해주면 된다.
-                                                            
-                                                            
+                                  
+## 🧩 POST 사용방법
+
+```
+$php artisan make:model Task -c -m
+```
+
+위 명령어를 입력하면 한번에 모델과 컨트롤러 마이그래이션을 생성할 수 있다.
+
+```php
+// resources/views/tasks/create.blade.php
+@extends('layout')
+
+@section('title','Create Task')
+
+@section('content')
+    <div class="px-10">
+        <h1 class="font-bold text-3xl">Create Task</h1>
+        <form action="/tasks" method="post">
+            @csrf
+            <label class="block" for="title">Title</label>
+            <input class="border border-gray-500 w-full" type="text" name="title" id="title"><br/>
+
+            <label for="body">Body</label>
+            <textarea class="block border border-gray-500 w-full" name="body" id="body" cols="30" rows="10"></textarea>
+
+            <button class="bg-blue-500 text-white px-1.5 m-1 float-right">Submit</button>
+        </form>
+    </div>
+@endsection
+```
+
+```php
+// web.php
+Route::post('/tasks','TaskController@store');
+```
+
+```php
+// app/Http/Controllers/TaskController.php
+public function store(Request $request){ // Request를 통해 POST로 넘어온 데이터 접근 가능
+
+        $task = Task::create([
+            'title' => $request->input('title'),
+            'body' => $request->input('body')
+        ]);
+
+        return redirect('/tasks');
+    }
+```
+
+```php
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Task extends Model
+{
+    protected $fillable = ['title','body']; // title 과 body의 변경을 허용한다.
+}
+```
+
+### 그냥 이렇게해서 실행을 해보면 491 ERROR가 발생한다.
+
+URL : https://laravel.com/docs/8.x/csrf
+
+CSRF Protection을 위해 라라벨에서 동작을 멈춘다.
+
+따라서, 해당 코드를 head 태그에 추가해줘야한다.
+
+```
+<meta name="csrf-token" content="{{ csrf_token() }}">
+```
+
+그 뒤에 form태그에는 @csrf 를 추가해주면 된다.
+
+<br/><br/>

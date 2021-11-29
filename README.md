@@ -10,7 +10,7 @@ Route Name은 관용적으로 사용하는 네이밍이니 아래의 표에 맞�
 
 ```php
 // web.php
-Route::get('/hello');
+Route::get('/hello', view('hello'));
 ```
 
 <br/><br/>
@@ -62,6 +62,87 @@ layout을 만들어놓고 각각의 100개의 파일에서는 @yield부분에 �
 
 @section('content','hello') // 이 방법도 가능
 ```
+
+<br/><br/>
+
+## 🧩 Views로 데이터 보내기
+
+web.php에서 Route::get을 이용하면 view를 화면에 띄울 수 있다.
+
+여기서 view의 두번째 매개변수에 객체를 넣어주면 해당 뷰가 매개변수로 넣어준 객체에 접근할 수 있다.
+
+```php
+// web.php
+Route::get('/hello', function(){
+    $hi = 'hello';
+    return view('hello', [
+        'hi' => $hi
+]});
+```
+
+위 예제를 보면, /hello가 호출될때 view의 hello 블레이드를 실행시키고, 이때 'hello'가 담긴 변수 $hi를 변수명 'hi'로 넘긴다.
+
+```php
+// resources/views/hello
+@extends('layout')
+
+@section('title')
+    $hi
+@endsection
+
+@section('content','hello')
+```
+
+블레이드에서 $hi로 바로 전달받은 객체를 접근할 수 있다.
+
+## 🧩 Controller
+
+컨트롤러는 어떤 일을 처리할지 결정해주는 클래스이고, view에게 전달할 정보를 처리하는 역할을 한다.
+
+컨트롤러 생성 방법
+
+```
+$php artisan make:controller [객체이름]Controller // ex) TaskController
+```
+
+위 명령어를 입력하면 app/Http/Controllers 폴더에 해당 컨트롤러가 생성된다.
+
+기존에 web.php에서 Route::get('/hello', view('hello')); 와 같이 view에게 전달할 정보까지 같이 처리했지만,
+
+이제는 이 과정을 컨트롤러에서 처리할것이다.
+
+```php
+// app/Http/Controllers/HomeControllers.php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HomeController extends Controller
+{
+    public function index(){
+            $books = [
+                'Harry Potter',
+                'Laravel'
+            ];
+            return view('welcome',['books' => $books]);
+    }
+}
+```
+
+위 코드와 같이 index() 메소드를 통해 행위를 정의한다.
+
+web.php에서 위 메소드를 사용하기 위해서 다음과 같이 코드를 구현해주면 된다.
+
+```php
+// web.php
+Route::get('/hello', 'HelloController@index');
+```
+
+'HelloController의 index 메소드를 실행하라'라는 뜻이다.
+
+이처럼 컨트롤러의 사용을 통해 더욱 객체지향적인 프로그래밍을 할 수 있다.
 
 <br/><br/>
 

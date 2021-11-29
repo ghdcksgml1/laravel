@@ -142,6 +142,10 @@ $npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autopref
                                   
 ## 🧩 POST 사용방법
 
+POST의 네이밍 규칙
+
+<img width="647" alt="스크린샷 2021-11-30 오전 1 21 57" src="https://user-images.githubusercontent.com/79779676/143904588-2697c092-a140-4354-8feb-4de12bf1902c.png">
+
 ```
 $php artisan make:model Task -c -m
 ```
@@ -217,3 +221,46 @@ CSRF Protection을 위해 라라벨에서 동작을 멈춘다.
 그 뒤에 form태그에는 @csrf 를 추가해주면 된다.
 
 <br/><br/>
+
+## 🧩 GET의 show방식
+
+GET의 show 방식은 해당 정보에 맞는 url을 설정할 수 있다. ex) id = 1, 127.0.0.1:8000/tasks/1
+
+네이밍 규칙은 아래와 같다.
+
+<img width="646" alt="스크린샷 2021-11-30 오전 1 14 03" src="https://user-images.githubusercontent.com/79779676/143903182-2941fd1a-4ebb-4318-8f9d-1ad289bba54a.png">
+
+```php
+// web.php
+Route::get('/tasks/{task}','TaskController@show');
+```
+
+```php
+// app/Http/Controllers/TaskController.php
+public function show(Task $task){ 
+// laravel에서 매개변수에 모델자료형을 앞에 붙여주면 알아서 $task id에 맞는 열을 찾아 $task변수에 넣어준다.
+        return view('tasks.show',[
+            'task' => $task
+        ]);
+    }
+```
+
+블레이드 파일에서는 Controller에서 task로 데이터베이스 정보를 넘겨줬기때문에
+
+$task 객체를 접근해서 원하는 정보를 빼내면 된다. ex) id를 원하면, $task -> id
+
+```html
+// resources/views/tasks/create.blade.php
+@extends('layout')
+
+@section('title','Task')
+
+@section('content')
+    <div class="px-10">
+        <h1 class="font-bold text-3xl"><a href="/tasks/">Task</a></h1><br/>
+        <h1 class="font-bold text-2xl">Title: {{ $task -> title }} <small class="float-right text-sm text-gray-500 font-normal">{{$task->created_at}}</small></h1><br/>
+        <h2 class="font-bold text-xl">Body</h2>
+        <div class="border p-3">{{{$task -> body}}}</div>
+    </div>
+@endsection
+```

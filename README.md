@@ -447,3 +447,63 @@ $task 객체를 접근해서 원하는 정보를 빼내면 된다. ex) id를 원
     </div>
 @endsection
 ```
+
+<br/><br/>
+
+## 🧩 데이터베이스를 수정하기 (PUT)
+
+아래의 그림과 같이 데이터를 수정하는 탭은 /tasks/{{task}}/edit 으로 한다.
+
+<img width="647" alt="스크린샷 2021-12-01 오후 8 39 37" src="https://user-images.githubusercontent.com/79779676/144228200-02160e36-a52d-46b6-a108-12b1120979ce.png">
+
+```php
+// web.php
+Route::get('/tasks/{task}/get', 'TaskController@edit');
+```
+
+```php
+// app/Http/Controllers/TaskController.php
+
+public function edit(Task $task){
+    
+    return view('tasks.edit',[
+        'task' => $task
+    ]);
+}
+```
+
+이후 edit.blade.php를 생성해준다.
+
+- edit.blade.php에서 form 태그
+
+```php
+<form action="/tasks/{{$task->id}}" method="POST">
+            @method('PUT') // 블레이드에서는 PUT,PATCH를 사용할 수 없으므로, 해당 코드를 넣어준다.
+            @csrf
+            <label class="block" for="title">Title</label>
+            <input class="border border-gray-500 w-full" type="text" name="title" id="title" value="{{$task->title}}"><br/>
+
+            <label for="body">Body</label>
+            <textarea class="block border border-gray-500 w-full" name="body" id="body" cols="30" rows="10">{{$task->body}}</textarea>
+
+            <button class="bg-blue-500 text-white px-1.5 m-1 float-right">Submit</button>
+        </form>
+```
+
+Submit 버튼이 눌리면 데이터베이스를 업데이트 해줘야한다.
+
+```php
+// web.php
+Route::put('/tasks/{task}', 'TaskController@update');
+```
+
+```php
+// app/Http/Controllers/TaskController.php
+public function update(Task $task){
+    $task->update([
+        'title' => request('title'),
+        'body' => request('body')
+    ]);
+    return redirect('/tasks/'.$task->id);
+}
+```

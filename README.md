@@ -132,6 +132,8 @@ Route::get('/hello', function(){
 
 블레이드에서 $hi로 바로 전달받은 객체를 접근할 수 있다.
 
+<br/><br/>
+
 ## 🧩 Controller
 
 컨트롤러는 어떤 일을 처리할지 결정해주는 클래스이고, view에게 전달할 정보를 처리하는 역할을 한다.
@@ -322,6 +324,8 @@ $npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autopref
 ```
                                                             
 다음을 추가해주면 된다.
+
+<br/><br/>
                                   
 ## 🧩 POST 사용방법
 
@@ -558,3 +562,48 @@ App/Task::all()
 ```
 App/Task::latest()->get()
 ```
+
+<br/><br/>
+
+## 🧩 Validation (데이터 검증)
+
+기본적으로 POST를 사용할때 빈값을 보내게 되면, 에러가 나게 된다.
+
+이를 막아주는것이 Validation이다.
+
+1. JavaScript required 이용
+
+```html
+<input class="border border-gray-500 w-full @error('title') border border-red-700 @enderror" type="text" name="title" id="title" value="{{old('title')?old('title'):$task->title}}" required><br/>
+```
+
+위와 같이 태그 뒷부분에 required를 붙이면, 빈 값을 제출하는 것을 막아줄 수 있다.
+
+하지만, 이 방법은 개발자 도구를 통해 required를 제거할 수 있기 때문에 2중으로 서버에서 막아주는 것이 필요하다.
+
+2. Controller에서 validate() 사용
+
+```php
+// app/Http/Controllers/TaskController.php
+
+public function store(){
+    request->validate([
+        'title'=>'required',
+        'body'=>'required'
+    ]);
+    $task = Task::create(request(['title','body']));
+    return redirect('/tasks/'.$task->id);
+}
+```
+
+위와같이 설정해줄 수 있다.
+
+validation을 사용했을때, 빈 값이 있으면 페이지가 리로딩되는데, 이때 기존에 입력했던 값들이 다 날라가게된다.
+
+이를 방지할 수 있는 코드가 old()이다.
+
+```php
+<input class="border border-gray-500 w-full @error('title') border border-red-700 @enderror" type="text" name="title" id="title" value="{{old('title')?old('title'):$task->title}}" required><br/>
+```
+
+value 부분에 if문을 넣어 기존에 입력하던 값이 있으면, 그 값을 넣어주고 아니면, 데이터베이스의 값을 넣어준다.

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     public function index(){
-        $tasks = Task::all();
+        $tasks = Task::latest()->get();
         return view('tasks.index',[
             'tasks' => $tasks
         ]);
@@ -42,11 +42,16 @@ class TaskController extends Controller
     }
 
     public function update(Task $task){
-        request('title');
+        //request('title');
         $task->update([
             'title' => request('title'),
             'body' => request('body')
         ]);
         return redirect('/tasks/'.$task->id);
+    }
+
+    public function destroy(Task $task){
+        $task->delete();
+        return redirect('/tasks');
     }
 }

@@ -5,8 +5,11 @@
 @endsection
 
 @section('content')
-    <div class="px-10">
-        <h1 class="font-bold text-3xl">Tasks List</h1>
+    <div class="px-10 mt-10">
+        <div class="flex">
+            <h1 class="flex-1 font-bold text-3xl">Tasks List</h1>
+            <a class="flex-initial bg-blue-400 text-white p-2 mx-2 hover:bg-blue-500" href="/tasks/create">Create</a>
+        </div>
         <ul>
             @foreach($tasks as $task)
                 <a href="/tasks/{{$task->id}}">

@@ -6,9 +6,17 @@
     <div class="px-10 mt-10">
         <div class="flex">
             <h1 class="font-bold text-3xl flex-1"><a href="/tasks/">Task</a></h1>
-            <a href="/tasks/{{$task->id}}/edit">
-                <button class="flex-initial bg-green-500 px-4 py-1 m-1 text-white hover:bg-green-700">Edit</button>
-            </a>
+            <div class="flex-initial">
+                <a href="/tasks/{{$task->id}}/edit">
+                    <button class="bg-green-500 px-4 py-1 m-1 text-white hover:bg-green-700">Edit</button>
+                </a>
+                <form class="float-right" action="/tasks/{{$task->id}}" method="POST">
+                    @method('DELETE') <!-- html에서 DELETE를 보낼 수 없으므로 -->
+                    @csrf
+                    <button class="bg-red-500 px-4 py-1 m-1 text-white hover:bg-red-700">Delete</button>
+                </form>
+            </div>
+
         </div>
         <br/>
         <h1 class="font-bold text-2xl">Title: {{ $task -> title }} <small class="float-right text-sm text-gray-500 font-normal">

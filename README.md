@@ -507,3 +507,54 @@ public function update(Task $task){
     return redirect('/tasks/'.$task->id);
 }
 ```
+
+<br/><br/>
+
+## 🧩 데이터베이스 삭제하기 (DELETE)
+
+마지막으로, 데이터베이스를 삭제하는 방법이다.
+
+<img width="649" alt="스크린샷 2021-12-01 오후 11 07 08" src="https://user-images.githubusercontent.com/79779676/144248751-f0c3a5f0-9c23-47cd-8fdd-cdd5777bda8f.png">
+
+위 그림과 같이 네이밍 처리를 한다.
+
+```php
+// web.php
+Route::delete('/tasks/{task}','TaskController@destroy');
+```
+
+```php
+// app/Http/Controllers/TaskController.php
+public function destroy(Task $task){
+    $task -> delete();
+    return redirect('/tasks');
+}
+```
+
+블레이드는 다음과 같이 작성한다.
+
+```php
+<form action="/tasks" method="POST">
+    @method('DELETE') // html에서는 DELETE를 처리못하기 때문에 다음과 같이 명시해줘야한다.
+    @nsrf
+    ...
+</form
+```
+
+### 아래의 코드를 입력하면 커멘드상에서 데이터 베이스를 시뮬레이션 해볼 수 있다.
+
+```
+$php artisan tinker
+```
+
+- 모든 데이터베이스 가져오기
+
+```
+App/Task::all()
+```
+
+- 모든 데이터베이스 최신순으로 가져오기
+
+```
+App/Task::latest()->get()
+```

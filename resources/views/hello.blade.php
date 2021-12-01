@@ -4,6 +4,4 @@
     Hello
 @endsection
 
-@section('content')
-    Hello
-@endsection
+@section('content','hello')

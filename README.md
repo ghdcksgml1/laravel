@@ -609,3 +609,65 @@ validation을 사용했을때, 빈 값이 있으면 페이지가 리로딩되는
 ```
 
 value 부분에 if문을 넣어 기존에 입력하던 값이 있으면, 그 값을 넣어주고 아니면, 데이터베이스의 값을 넣어준다.
+
+<br/><br/>
+
+## 🧩 로그인 구현
+
+laravel에서 로그인 페이지 만들기는 짱쉽다.
+
+```
+$php artisan make:auth
+```
+
+이렇게 하면 로그인 페이지가 만들어진다.
+
+<br/><br/>
+
+## 🧩 권한 설정하기
+
+```php
+// web.php
+Route::prefix('tasks')->middleware('auth')->group(function(){
+    Route::get('/','TaskController@index');
+    Route::get('/create','TaskController@create');
+    Route::post('/','TaskController@store');
+    Route::get('/{task}','TaskController@show');
+    Route::get('/{task}/edit','TaskController@edit');
+    Route::put('/{task}','TaskController@update');
+    Route::delete('/{task}','TaskController@destroy');
+});
+```
+
+위 코드와같이 prefix()를 통해 url의 중복을 줄일 수 있고, middleware('auth')를 통해 group안의 내용들을
+
+로그인 없이 접근하지 못하게 설정했다.
+
+<br/>
+
+### auth()->id()
+
+auth()->id()를 통해 현재 로그인해있는 아이디를 알아낼 수 있다.
+
+<br/>
+
+### auth()->id()를 활용하여 본인의 게시물만 볼 수 있게 설정하기
+
+```php
+// app/Http/Controllers/TaskController.php
+public function index(){
+    $tasks = Task::latest()->where('user_id',auth()->id())->get();
+    return view('tasks.index',[
+        'tasks' => $tasks
+    ]);
+}
+
+public function show(Task $task){
+    if(auth()->id() != $task->user_id){
+        abort(403);
+    }
+    return view('tasks.show',[
+        'task'=>$task
+    ]);
+}
+```

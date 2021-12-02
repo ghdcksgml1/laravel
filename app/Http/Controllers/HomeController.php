@@ -6,19 +6,23 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(){
-            $books = [
-                'Harry Potter',
-                'Laravel'
-            ];
-            return view('welcome')->with(['books' => $books]);
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 
-    public function hello(){
-        return view('hello');
-    }
-
-    public function contact(){
-        return view('contact');
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        return view('home');
     }
 }

@@ -40,4 +40,8 @@ class User extends Authenticatable
     public function owns(Task $task){
         return auth()->id() == $task->user_id;
     }
+
+    public function tasks() {
+        return $this->hasMany(Task::class);
+    }
 }

@@ -671,3 +671,17 @@ public function show(Task $task){
     ]);
 }
 ```
+
+<br/><br/>
+
+## 🧩 Route resource
+
+Route::resource 를 이용하면 "CRUD"경로를 한 줄의 코드로 컨트롤러에 할당할 수 있다.
+
+<br/><br/>
+
+## 🧩 모델 관계
+
+Laravel Korea URL: https://laravel.kr/docs/5.7/eloquent-relationships
+
+<br/><br/>
